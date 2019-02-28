@@ -14,7 +14,7 @@ using namespace std;
 const double EPS = 1e-9;
 
 template <class T>
-void getMemory(T*&, int);
+T* getMemory(int);
 template <class T>
 void freeMemory(T*&);
 int getCntOfArray();
@@ -38,15 +38,12 @@ int main()
 	double a, b, c;
 	inputLine(a, b, c);
 	int n{ getCntOfArray() }, first, last;
-	int *X;
-	getMemory(X, n);
-	int *Y;
-	getMemory(Y, n);
+	int *X{ getMemory<int>(n) };
+	int *Y{ getMemory<int>(n) };
 	setIntervalForRandom(first,last);
 	initArrayRandom(X, n, first, last);
 	initArrayRandom(Y, n, first, last);
-	double *Distance;
-	getMemory(Distance, n);
+	double *Distance{ getMemory<double>(n) };
 	calcDistance(Distance, X, Y, n, a, b, c);
 	outputPoints(X, Y, Distance, n);
 	sortPoints(X, Y, Distance, n);
@@ -59,15 +56,16 @@ int main()
 }
 
 template <class T>
-void getMemory(T *&Array, int n)
+T* getMemory(int n)
 {
-	Array = new (nothrow) T[n];
+	T *Array = new (nothrow) T[n];
 	if (!Array)
 	{
 		cout << "Ощибка выделения памяти!\n";
 		system("pause");
 		exit(0);
 	}
+	return Array;
 }
 
 template <class T>

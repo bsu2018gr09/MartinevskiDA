@@ -12,7 +12,7 @@
 using namespace std;
 
 template <class T>
-void getMemory(T*&, int);
+T* getMemory(int);
 template <class T>
 void freeMemory(T*&);
 int getCntOfArray();
@@ -36,8 +36,7 @@ int main()
 	srand(time(0));
 	setlocale(LC_ALL, "Russian");
 	int n{ getCntOfArray() }, a, b;
-	int *Array;
-	getMemory(Array, n);
+	int *Array{ getMemory<int>(n) };
 	setIntervalForRandom(a, b);
 	initArrayRandom(Array, n, a, b);
 	outputArray(Array, n);
@@ -51,15 +50,16 @@ int main()
 }
 
 template <class T>
-void getMemory(T *&Array, int n)
+T* getMemory(int n)
 {
-	Array = new (nothrow) T[n];
+	T *Array = new (nothrow) T[n];
 	if (!Array)
 	{
 		cout << "Ощибка выделения памяти!\n";
 		system("pause");
 		exit(0);
 	}
+	return Array;
 }
 
 template <class T>
