@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <clocale>
 
 using namespace std;
@@ -9,7 +9,7 @@ T* getMemory()
 	T* item = new (nothrow) T();
 	if (!item)
 	{
-		cout << "Îùèáêà âûäåëåíèÿ ïàìÿòè!\n";
+		cout << "ÐžÑ‰Ð¸Ð±ÐºÐ° Ð²Ñ‹Ð´ÐµÐ»ÐµÐ½Ð¸Ñ Ð¿Ð°Ð¼ÑÑ‚Ð¸!\n";
 		system("pause");
 		exit(0);
 	}
@@ -91,7 +91,7 @@ public:
 	{
 		if (!cntElements)
 		{
-			cout << "Íåò ýëåìåíòîâ â î÷åðåäè!\n";
+			cout << "ÐÐµÑ‚ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð¾Ð² Ð² Ð¾Ñ‡ÐµÑ€ÐµÐ´Ð¸!\n";
 			return NULL;
 		}
 		return first->getData();
@@ -101,7 +101,7 @@ public:
 	{
 		if (!cntElements)
 		{
-			cout << "Íåò ýëåìåíòîâ â î÷åðåäè!\n";
+			cout << "ÐÐµÑ‚ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð¾Ð² Ð² Ð¾Ñ‡ÐµÑ€ÐµÐ´Ð¸!\n";
 			return NULL;
 		}
 		return last->getData();
@@ -129,7 +129,7 @@ public:
 	{
 		if (!cntElements)
 		{
-			cout << "Íåò ýëåìåíòîâ â î÷åðåäè!\n";
+			cout << "ÐÐµÑ‚ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð¾Ð² Ð² Ð¾Ñ‡ÐµÑ€ÐµÐ´Ð¸!\n";
 			return;
 		}
 		Node<T>* tmpNode = first->getNextNode();
