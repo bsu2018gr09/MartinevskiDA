@@ -29,6 +29,12 @@ public:
 		nextNode = nullptr;
 	}
 
+	Node(Node<T>* newNode)
+	{
+		data = newNode->getData();
+		nextNode = newNode->getNextNode();
+	}
+	
 	Node(T newData, Node<T>* newNextNode)
 	{
 		data = newData;
@@ -109,7 +115,7 @@ public:
 
 	void push(T data)
 	{
-		Node<T>* tmpNode = getMemory<Node<T>>();
+		Node<T>* tmpNode{ getMemory<Node<T>>() };
 		tmpNode->setData(data);
 		if (!cntElements)
 		{
@@ -132,13 +138,37 @@ public:
 			cout << "Нет элементов в очереди!\n";
 			return;
 		}
-		Node<T>* tmpNode = first->getNextNode();
+		Node<T>* tmpNode{ first->getNextNode() };
 		delete first;
 		first = tmpNode;
 		tmpNode = nullptr;
 		if (cntElements == 1)
 			last = nullptr;
 		--cntElements;
+	}
+
+	void printAll()
+	{
+		cout << "Элементы очереди: ";
+		Node<T>* tmpNode{ first };
+		while (tmpNode != nullptr)
+		{
+			cout << tmpNode->getData() << " ";
+			tmpNode = tmpNode->getNextNode();
+		}
+		cout << "\n\n";
+	}
+
+	Node<T>* find(T data)
+	{
+		Node<T>* tmpNode{ first };
+		while (tmpNode != nullptr)
+		{
+			if (tmpNode->getData() == data)
+				break;
+			tmpNode = tmpNode->getNextNode();
+		}
+		return tmpNode;
 	}
 };
 
