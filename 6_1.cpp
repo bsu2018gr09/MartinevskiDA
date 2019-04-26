@@ -1,5 +1,5 @@
-/**
-Класс линейных уравнений с использованием динамической памяти(выбор количества неизвестных)
+п»ї/**
+РљР»Р°СЃСЃ Р»РёРЅРµР№РЅС‹С… СѓСЂР°РІРЅРµРЅРёР№ СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј РґРёРЅР°РјРёС‡РµСЃРєРѕР№ РїР°РјСЏС‚Рё(РІС‹Р±РѕСЂ РєРѕР»РёС‡РµСЃС‚РІР° РЅРµРёР·РІРµСЃС‚РЅС‹С…)
 */
 
 #include <iostream>
@@ -34,7 +34,7 @@ T* getMemory(int n)
 	T *Array = new (nothrow) T[n];
 	if (!Array)
 	{
-		cout << "Ощибка выделения памяти!\n";
+		cout << "РћС‰РёР±РєР° РІС‹РґРµР»РµРЅРёСЏ РїР°РјСЏС‚Рё!\n";
 		system("pause");
 		exit(ERROR_NO_MEMORY);
 	}
@@ -127,25 +127,25 @@ public:
 
 	Data() : Name{ getMemory<char>(1) }, coefficient{ 0 }
 	{
-		//cout<<"Constructor №1 for Data\n";
+		//cout<<"Constructor в„–1 for Data\n";
 	};
 
 	Data(char* newName, double newCoefficient) : Name{ getMemory<char>(strlen(newName) + SYMBOL_OF_STRING_END) }, coefficient{ newCoefficient }
 	{
 		if (!checkDataName(newName))
 		{
-			cout << "Ошибка! Некорректное название неизвестной!\n\n";
+			cout << "РћС€РёР±РєР°! РќРµРєРѕСЂСЂРµРєС‚РЅРѕРµ РЅР°Р·РІР°РЅРёРµ РЅРµРёР·РІРµСЃС‚РЅРѕР№!\n\n";
 			system("pause");
 			exit(ERROR_WRONG_NAME);
 		}
 		strcpy(Name, newName);
-		//cout<<"Constructor №2 for Data\n";
+		//cout<<"Constructor в„–2 for Data\n";
 	}
 
 	Data(const Data& newData) : Name{ getMemory<char>(strlen(newData.Name) + SYMBOL_OF_STRING_END) }, coefficient{ newData.coefficient }
 	{
 		strcpy(Name, newData.Name);
-		//cout<<"Constructor №3 for Data\n";
+		//cout<<"Constructor в„–3 for Data\n";
 	}
 
 	Data(char* String)
@@ -154,13 +154,13 @@ public:
 		strcpy(TMPString, String);
 		if (!checkStringForData(TMPString))
 		{
-			cout << "Ошибка! Введен некорректный моном!\n\n";
+			cout << "РћС€РёР±РєР°! Р’РІРµРґРµРЅ РЅРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ РјРѕРЅРѕРј!\n\n";
 			system("pause");
 			exit(ERROR_WRONG_STRING_MONOM);
 		}
 		this->getDataFromString(TMPString);
 		freeMemory(TMPString);
-		//cout<<"Constructor №4 for Data\n";
+		//cout<<"Constructor в„–4 for Data\n";
 	}
 
 	void setString(char* String)
@@ -169,7 +169,7 @@ public:
 		strcpy(TMPString, String);
 		if (!checkStringForData(TMPString))
 		{
-			cout << "Ошибка! Введен некорректный моном!\n\n";
+			cout << "РћС€РёР±РєР°! Р’РІРµРґРµРЅ РЅРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ РјРѕРЅРѕРј!\n\n";
 			system("pause");
 			exit(ERROR_WRONG_STRING_MONOM);
 		}
@@ -182,7 +182,7 @@ public:
 	{
 		if (!checkDataName(newName))
 		{
-			cout << "Ошибка! Некорректное название неизвестной!\n\n";
+			cout << "РћС€РёР±РєР°! РќРµРєРѕСЂСЂРµРєС‚РЅРѕРµ РЅР°Р·РІР°РЅРёРµ РЅРµРёР·РІРµСЃС‚РЅРѕР№!\n\n";
 			system("pause");
 			exit(ERROR_WRONG_NAME);
 		}
@@ -200,7 +200,7 @@ public:
 	{
 		if (!checkDataName(newName))
 		{
-			cout << "Ошибка! Некорректное название неизвестной!\n\n";
+			cout << "РћС€РёР±РєР°! РќРµРєРѕСЂСЂРµРєС‚РЅРѕРµ РЅР°Р·РІР°РЅРёРµ РЅРµРёР·РІРµСЃС‚РЅРѕР№!\n\n";
 			system("pause");
 			exit(ERROR_WRONG_NAME);
 		}
@@ -250,7 +250,7 @@ public:
 	{
 		if (fabs(coeff) < EPS)
 		{
-			cout << "Ошибка! Деление на 0!\n\n";
+			cout << "РћС€РёР±РєР°! Р”РµР»РµРЅРёРµ РЅР° 0!\n\n";
 			system("pause");
 			exit(ERROR_DIVISION_BY_ZERO);
 		}
@@ -306,7 +306,7 @@ public:
 	{
 		if (fabs(coeff) < EPS)
 		{
-			cout << "Ошибка! Деление на 0!\n\n";
+			cout << "РћС€РёР±РєР°! Р”РµР»РµРЅРёРµ РЅР° 0!\n\n";
 			system("pause");
 			exit(ERROR_DIVISION_BY_ZERO);
 		}
@@ -507,14 +507,14 @@ public:
 
 	LinearPolynomial() : cntData{ 0 }, ArrayData{ nullptr }
 	{
-		//cout<<"Constructor №1 for LinearPolynomial\n";
+		//cout<<"Constructor в„–1 for LinearPolynomial\n";
 	}
 
 	LinearPolynomial(const LinearPolynomial& lp) : cntData{ lp.cntData }, ArrayData{ getMemory<Data>(lp.cntData) }
 	{
 		for (int i{ 0 }; i < lp.cntData; ++i)
 			ArrayData[i] = lp.ArrayData[i];
-		//cout<<"Constructor №2 for LinearPolynomial\n";
+		//cout<<"Constructor в„–2 for LinearPolynomial\n";
 	}
 
 	LinearPolynomial(char* String) : cntData{ 0 }
@@ -523,7 +523,7 @@ public:
 		strcpy(TMPString, String);
 		if (!(this->checkString(TMPString)))
 		{
-			cout << "Ошибка! Введен некорректный полином!\n\n";
+			cout << "РћС€РёР±РєР°! Р’РІРµРґРµРЅ РЅРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ РїРѕР»РёРЅРѕРј!\n\n";
 			system("pause");
 			exit(ERROR_WRONG_STRING_POLYNOMIAL);
 		}
@@ -531,21 +531,21 @@ public:
 		this->getLinearPolynomialFromString(TMPString);
 		this->normalize();
 		freeMemory(TMPString);
-		//cout<<"Constructor №3 for LinearPolynomial\n";
+		//cout<<"Constructor в„–3 for LinearPolynomial\n";
 	}
 
 	LinearPolynomial(Data* newArrayData, int newCntData) : cntData{ newCntData }, ArrayData{ getMemory<Data>(newCntData) }
 	{
 		if (newCntData < 0)
 		{
-			cout << "Ошибка! Некорректное значение размера массива!\n\n";
+			cout << "РћС€РёР±РєР°! РќРµРєРѕСЂСЂРµРєС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ СЂР°Р·РјРµСЂР° РјР°СЃСЃРёРІР°!\n\n";
 			system("pause");
 			exit(ERROR_WRONG_CNT);
 		}
 		for (int i{ 0 }; i < newCntData; ++i)
 			ArrayData[i] = newArrayData[i];
 		this->normalize();
-		//cout<<"Constructor №4 for LinearPolynomial\n";
+		//cout<<"Constructor в„–4 for LinearPolynomial\n";
 	}
 
 	int getCntData()
@@ -562,7 +562,7 @@ public:
 	{
 		if ((index >= cntData) || (index < 0))
 		{
-			cout << "Ошибка! Выход за границу массива!\n\n";
+			cout << "РћС€РёР±РєР°! Р’С‹С…РѕРґ Р·Р° РіСЂР°РЅРёС†Сѓ РјР°СЃСЃРёРІР°!\n\n";
 			system("pause");
 			exit(ERROR_ARRAY_OVERRUN);
 		}
@@ -573,7 +573,7 @@ public:
 	{
 		if (newCntData < 0)
 		{
-			cout << "Ошибка! Некорректное значение размера массива!\n\n";
+			cout << "РћС€РёР±РєР°! РќРµРєРѕСЂСЂРµРєС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ СЂР°Р·РјРµСЂР° РјР°СЃСЃРёРІР°!\n\n";
 			system("pause");
 			exit(ERROR_WRONG_CNT);
 		}
@@ -604,7 +604,7 @@ public:
 		freeMemory(ArrayData);
 		if (!(this->checkString(TMPString)))
 		{
-			cout << "Ошибка! Введен некорректный полином!\n\n";
+			cout << "РћС€РёР±РєР°! Р’РІРµРґРµРЅ РЅРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ РїРѕР»РёРЅРѕРј!\n\n";
 			system("pause");
 			exit(ERROR_WRONG_STRING_POLYNOMIAL);
 		}
@@ -666,7 +666,7 @@ public:
 	{
 		if (fabs(coeff) < EPS)
 		{
-			cout << "Ошибка! Деление на 0!\n\n";
+			cout << "РћС€РёР±РєР°! Р”РµР»РµРЅРёРµ РЅР° 0!\n\n";
 			system("pause");
 			exit(ERROR_DIVISION_BY_ZERO);
 		}
@@ -737,7 +737,7 @@ public:
 	{
 		if (fabs(coeff) < EPS)
 		{
-			cout << "Ошибка! Деление на 0!\n\n";
+			cout << "РћС€РёР±РєР°! Р”РµР»РµРЅРёРµ РЅР° 0!\n\n";
 			system("pause");
 			exit(ERROR_DIVISION_BY_ZERO);
 		}
@@ -810,10 +810,10 @@ public:
 int main()
 {
 	setlocale(LC_ALL, "Russian");
-	cout << "Ввод полинома как будто вы его пишите на бумаге. Нвпример: -a+c-d-2.4d+8\n";
-	cout << "Сначала вводим коэффициент, затем название неизвестной\n";
-	cout << "Ограничения на название неизвестной такие же, как на название перемнной C++\n";
-	cout << "Пробелы игнорируются\n\n";
+	cout << "Р’РІРѕРґ РїРѕР»РёРЅРѕРјР° РєР°Рє Р±СѓРґС‚Рѕ РІС‹ РµРіРѕ РїРёС€РёС‚Рµ РЅР° Р±СѓРјР°РіРµ. РќРІРїСЂРёРјРµСЂ: -a+c-d-2.4d+8\n";
+	cout << "РЎРЅР°С‡Р°Р»Р° РІРІРѕРґРёРј РєРѕСЌС„С„РёС†РёРµРЅС‚, Р·Р°С‚РµРј РЅР°Р·РІР°РЅРёРµ РЅРµРёР·РІРµСЃС‚РЅРѕР№\n";
+	cout << "РћРіСЂР°РЅРёС‡РµРЅРёСЏ РЅР° РЅР°Р·РІР°РЅРёРµ РЅРµРёР·РІРµСЃС‚РЅРѕР№ С‚Р°РєРёРµ Р¶Рµ, РєР°Рє РЅР° РЅР°Р·РІР°РЅРёРµ РїРµСЂРµРјРЅРЅРѕР№ C++\n";
+	cout << "РџСЂРѕР±РµР»С‹ РёРіРЅРѕСЂРёСЂСѓСЋС‚СЃСЏ\n\n";
 	LinearPolynomial lp1;
 	cin >> lp1;
 	cout << lp1 << endl;
@@ -827,7 +827,7 @@ int main()
 	LinearPolynomial* ptr2 = new (nothrow) LinearPolynomial;
 	if (!ptr2)
 	{
-		cout << "Ощибка выделения памяти!\n";
+		cout << "РћС‰РёР±РєР° РІС‹РґРµР»РµРЅРёСЏ РїР°РјСЏС‚Рё!\n";
 		system("pause");
 		exit(ERROR_NO_MEMORY);
 	}
