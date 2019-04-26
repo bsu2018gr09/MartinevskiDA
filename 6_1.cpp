@@ -72,6 +72,64 @@ bool checkStringForData(char* String)
 	return true;
 }
 
+bool stringsEqual(char* String1, char* String2)
+{
+   if (strlen(String1) != strlen(String2))
+      return false;
+   int len{ strlen(String1) };
+   for (int i{ 0 }; i < len; ++i)
+      if (String1[i] != String2[i])
+         return false;
+   return true;
+}
+
+bool checkDataName(char* Name)
+{
+   if ((strlen(Name)) && ((strspn(Name, GoodSymbolsForName) < strlen(Name)) || (!strcspn(Name, Numbers))))
+      return false;
+   return true;
+}
+
+bool checkString(char* String, int& cntData)
+{
+   if ((!strlen(String)) || (strspn(String, GoodSymbolsForString) < strlen(String)))
+      return false;
+   char* BeginOfString{ String };
+   while (strcspn(String, " ") < strlen(String))
+   {
+      strcpy(String, String + strspn(String, " "));
+      String += strcspn(String, " ");
+   }
+   String = BeginOfString;
+   if ((strlen(String) > 0) && ((String[0] == '+') || (String[0] == '-')))
+      ++String;
+   int posOfSign{ strcspn(String,"+-") };
+   char* TMPString{ getMemory<char>(MAX_STRING_LEN) };
+   while (posOfSign < strlen(String))
+   {
+      strncpy(TMPString, String, posOfSign);
+      TMPString[posOfSign] = '\0';
+      if (!checkStringForData(TMPString))
+      {
+         freeMemory(TMPString);
+         return false;
+      }
+      ++cntData;
+      String += posOfSign;
+      posOfSign = strcspn(String + 1, "+-") + 1;
+   }
+   strncpy(TMPString, String, posOfSign);
+   TMPString[posOfSign] = '\0';
+   if (!checkStringForData(TMPString))
+   {
+      freeMemory(TMPString);
+      return false;
+   }
+   ++cntData;
+   freeMemory(TMPString);
+   return true;
+}
+
 class Data
 {
 private:
@@ -110,13 +168,6 @@ private:
 		}
 		if (flag)
 			coefficient *= -1;
-	}
-
-	bool checkDataName(char* Name)
-	{
-		if ((strlen(Name)) && ((strspn(Name, GoodSymbolsForName) < strlen(Name)) || (!strcspn(Name, Numbers))))
-			return false;
-		return true;
 	}
 public:
 	~Data()
@@ -343,6 +394,22 @@ public:
 	}
 };
 
+bool AnalyzeData(Data _first, Data _second)
+{
+   char* firstStr{ _first.getName() };
+   char* secondStr{ _second.getName() };
+   int lenFirst{ strlen(firstStr) }, lenSecond{ strlen(secondStr) };
+   if (lenFirst < lenSecond)
+      return true;
+   if (lenFirst == lenSecond)
+      for (int i{ 0 }; i < lenFirst; ++i)
+         if (firstStr[i] < secondStr[i])
+            return true;
+         else if (firstStr[i] > secondStr[i])
+            return false;
+   return false;
+}
+
 class LinearPolynomial
 {
 private:
@@ -370,73 +437,6 @@ private:
 		TMPString[posOfSign] = '\0';
 		ArrayData[i++].setString(TMPString);
 		freeMemory(TMPString);
-	}
-
-	bool checkString(char* String)
-	{
-		if ((!strlen(String)) || (strspn(String, GoodSymbolsForString) < strlen(String)))
-			return false;
-		char* BeginOfString{ String };
-		while (strcspn(String, " ") < strlen(String))
-		{
-			strcpy(String, String + strspn(String, " "));
-			String += strcspn(String, " ");
-		}
-		String = BeginOfString;
-		if ((strlen(String) > 0) && ((String[0] == '+') || (String[0] == '-')))
-			++String;
-		int posOfSign{ strcspn(String,"+-") };
-		char* TMPString{ getMemory<char>(MAX_STRING_LEN) };
-		while (posOfSign < strlen(String))
-		{
-			strncpy(TMPString, String, posOfSign);
-			TMPString[posOfSign] = '\0';
-			if (!checkStringForData(TMPString))
-			{
-				freeMemory(TMPString);
-				return false;
-			}
-			++cntData;
-			String += posOfSign;
-			posOfSign = strcspn(String + 1, "+-") + 1;
-		}
-		strncpy(TMPString, String, posOfSign);
-		TMPString[posOfSign] = '\0';
-		if (!checkStringForData(TMPString))
-		{
-			freeMemory(TMPString);
-			return false;
-		}
-		++cntData;
-		freeMemory(TMPString);
-		return true;
-	}
-
-	bool AnalyzeData(Data _first, Data _second)
-	{
-		char* firstStr{ _first.getName() };
-		char* secondStr{ _second.getName() };
-		int lenFirst{ strlen(firstStr) }, lenSecond{ strlen(secondStr) };
-		if (lenFirst < lenSecond)
-			return true;
-		if (lenFirst == lenSecond)
-			for (int i{ 0 }; i < lenFirst; ++i)
-				if (firstStr[i] < secondStr[i])
-					return true;
-				else if (firstStr[i] > secondStr[i])
-					return false;
-		return false;
-	}
-
-	bool stringsEqual(char* String1, char* String2)
-	{
-		if (strlen(String1) != strlen(String2))
-			return false;
-		int len{ strlen(String1) };
-		for (int i{ 0 }; i < len; ++i)
-			if (String1[i] != String2[i])
-				return false;
-		return true;
 	}
 
 	void QuickSort(int bbegin, int eend)
@@ -521,7 +521,7 @@ public:
 	{
 		char* TMPString{ getMemory<char>(strlen(String) + SYMBOL_OF_STRING_END) };
 		strcpy(TMPString, String);
-		if (!(this->checkString(TMPString)))
+		if (!checkString(TMPString, this->cntData))
 		{
 			cout << "Ошибка! Введен некорректный полином!\n\n";
 			system("pause");
@@ -602,7 +602,7 @@ public:
 		strcpy(TMPString, String);
 		cntData = 0;
 		freeMemory(ArrayData);
-		if (!(this->checkString(TMPString)))
+		if (!checkString(TMPString, this->cntData))
 		{
 			cout << "Ошибка! Введен некорректный полином!\n\n";
 			system("pause");
