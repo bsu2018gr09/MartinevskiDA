@@ -28,14 +28,14 @@ T* getMemory(int n)
 {
 	if (n <= 0)
 	{
-		cout << "Ощибка! Некорректное значение для выделение памяти\n";
+		cout << "Ошибка! Некорректное значение для выделения памяти\n";
 		system("pause");
 		exit(ERROR_WRONG_CNT_MEMORY);
 	}
 	T *Array = new (nothrow) T[n];
 	if (!Array)
 	{
-		cout << "Ощибка выделения памяти!\n";
+		cout << "Ошибка выделения памяти!\n";
 		system("pause");
 		exit(ERROR_NO_MEMORY);
 	}
@@ -839,7 +839,7 @@ int main()
 	LinearPolynomial* ptr2 = new (nothrow) LinearPolynomial;
 	if (!ptr2)
 	{
-		cout << "Ощибка выделения памяти!\n";
+		cout << "Ошибка выделения памяти!\n";
 		system("pause");
 		exit(ERROR_NO_MEMORY);
 	}
