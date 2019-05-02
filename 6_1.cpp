@@ -28,14 +28,14 @@ T* getMemory(int n)
 {
 	if (n <= 0)
 	{
-		cout << "Ошибка! Некорректное значение для выделения памяти\n";
+		cerr << "Ошибка! Некорректное значение для выделения памяти\n";
 		system("pause");
 		exit(ERROR_WRONG_CNT_MEMORY);
 	}
 	T *Array = new (nothrow) T[n];
 	if (!Array)
 	{
-		cout << "Ошибка выделения памяти!\n";
+		cerr << "Ошибка выделения памяти!\n";
 		system("pause");
 		exit(ERROR_NO_MEMORY);
 	}
@@ -187,7 +187,7 @@ public:
 	{
 		if (!checkDataName(newName))
 		{
-			cout << "Ошибка! Некорректное название неизвестной! Установлено значение по умолчанию\n\n";
+			cerr << "Ошибка! Некорректное название неизвестной! Установлено значение по умолчанию\n\n";
 			freeMemory(Name);
 			Name = getMemory<char>(STRING_END);
 			Name[0] = SYMBOL_OF_STRING_END;
@@ -209,7 +209,7 @@ public:
 		strcpy(TMPString, String);
 		if (!checkStringForData(TMPString))
 		{
-			cout << "Ошибка! Введен некорректный моном! Установлено значение по умолчанию\n\n";
+			cerr << "Ошибка! Введен некорректный моном! Установлено значение по умолчанию\n\n";
 			Name = getMemory<char>(STRING_END);
 			Name[0] = SYMBOL_OF_STRING_END;
 		}
@@ -224,7 +224,7 @@ public:
 		char* TMPString{ getMemory<char>(strlen(String) + STRING_END) };
 		strcpy(TMPString, String);
 		if (!checkStringForData(TMPString))
-			cout << "Ошибка! Введен некорректный моном! Изменения не применены\n\n";
+			cerr << "Ошибка! Введен некорректный моном! Изменения не применены\n\n";
 		else
 		{
 			freeMemory(Name);
@@ -236,7 +236,7 @@ public:
 	void setName(char* newName)
 	{
 		if (!checkDataName(newName))
-			cout << "Ошибка! Некорректное название неизвестной! Изменения не применены\n\n";
+			cerr << "Ошибка! Некорректное название неизвестной! Изменения не применены\n\n";
 		else
 		{
 			freeMemory(Name);
@@ -253,7 +253,7 @@ public:
 	void setNameAndCoefficient(char* newName, double newCoefficient)
 	{
 		if (!checkDataName(newName))
-			cout << "Ошибка! Некорректное название неизвестной! Изменения не применены\n\n";
+			cerr << "Ошибка! Некорректное название неизвестной! Изменения не применены\n\n";
 		else
 		{
 			freeMemory(Name);
@@ -303,7 +303,7 @@ public:
 	{
 		if (fabs(coeff) < EPS)
 		{
-			cout << "Ошибка! Деление на 0! Операция не выполена\n\n";
+			cerr << "Ошибка! Деление на 0! Операция не выполена\n\n";
 			return Data(Name, coefficient);
 		}
 		return Data(Name, coefficient / coeff);
@@ -358,7 +358,7 @@ public:
 	{
 		if (fabs(coeff) < EPS)
 		{
-			cout << "Ошибка! Деление на 0! Операция не выполена\n\n";
+			cerr << "Ошибка! Деление на 0! Операция не выполена\n\n";
 			return *this;
 		}
 		coefficient /= coeff;
@@ -379,7 +379,7 @@ public:
 
 	friend ostream& operator <<(ostream& sstream, const Data& data)
 	{
-		cout << fixed;
+		sstream << fixed;
 		sstream << setprecision(PRECISION_FOR_OUTPUT) << data.coefficient << data.Name;
 		return sstream;
 	}
@@ -525,7 +525,7 @@ public:
 		strcpy(TMPString, String);
 		if (!checkString(TMPString, cntData))
 		{
-			cout << "Ошибка! Введен некорректный полином! Установлено значение по умолчанию\n\n";
+			cerr << "Ошибка! Введен некорректный полином! Установлено значение по умолчанию\n\n";
 			cntData = 0;
 		}
 		else
@@ -542,7 +542,7 @@ public:
 	{
 		if (newCntData <= 0)
 		{
-			cout << "Ошибка! Некорректное значение размера массива! Установлено значение по умолчанию\n\n";
+			cerr << "Ошибка! Некорректное значение размера массива! Установлено значение по умолчанию\n\n";
 			cntData = 0;
 		}
 		else
@@ -564,7 +564,7 @@ public:
 	{
 		if ((index >= cntData) || (index < 0))
 		{
-			cout << "Ошибка! Выход за границу массива! Возвращен объект по умолчанию\n\n";
+			cerr << "Ошибка! Выход за границу массива! Возвращен объект по умолчанию\n\n";
 			return Data{};
 		}
 		return ArrayData[index];
@@ -573,7 +573,7 @@ public:
 	void setArrayDataAndCnt(Data* newArrayData, int newCntData)
 	{
 		if (newCntData <= 0)
-			cout << "Ошибка! Некорректное значение размера массива! Изменения не применены\n\n";
+			cerr << "Ошибка! Некорректное значение размера массива! Изменения не применены\n\n";
 		else
 		{
 			cntData = newCntData;
@@ -605,7 +605,7 @@ public:
 		strcpy(TMPString, String);
 		int newCntData{ 0 };
 		if (!checkString(TMPString, newCntData))
-			cout << "Ошибка! Введен некорректный полином! Изменения не применены\n\n";
+			cerr << "Ошибка! Введен некорректный полином! Изменения не применены\n\n";
 		else
 		{
 			freeMemory(ArrayData);
@@ -672,7 +672,7 @@ public:
 	{
 		if (fabs(coeff) < EPS)
 		{
-			cout << "Ошибка! Деление на 0! Операция не выполена\n\n";
+			cerr << "Ошибка! Деление на 0! Операция не выполена\n\n";
 			return LinearPolynomial{ *this };
 		}
 		LinearPolynomial tmp{ *this };
@@ -746,7 +746,7 @@ public:
 	{
 		if (fabs(coeff) < EPS)
 		{
-			cout << "Ошибка! Деление на 0! Операция не выполена\n\n";
+			cerr << "Ошибка! Деление на 0! Операция не выполена\n\n";
 			return *this;
 		}
 		for (int i{ 0 }; i < cntData; ++i)
@@ -839,7 +839,7 @@ int main()
 	LinearPolynomial* ptr2 = new (nothrow) LinearPolynomial;
 	if (!ptr2)
 	{
-		cout << "Ошибка выделения памяти!\n";
+		cerr << "Ошибка выделения памяти!\n";
 		system("pause");
 		exit(ERROR_NO_MEMORY);
 	}
