@@ -1,4 +1,4 @@
-﻿/**
+/**
 Класс линейных уравнений с использованием динамической памяти(выбор количества неизвестных)
 */
 #define _CRT_SECURE_NO_WARNINGS
@@ -22,6 +22,10 @@ char* GoodSymbolsForString = " +-._abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRS
 char* GoodSymbolsForName = "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 char* Letters = "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 char* Numbers = "0123456789";
+
+
+//во всех методах проверить, что нужно именно char*, если можно, заменить на const char*
+//определиться со стилем именовая переменных: или все с большой буквы, или все с маленькой
 
 template <class T>
 T* getMemory(int n)
@@ -137,6 +141,8 @@ private:
 	char* Name;
 	double coefficient;
 
+//можно просто сделать  Data parse(const char*)
+//функции get обычно что-то возвращают
 	void getDataFromString(char* String)
 	{
 		bool flag{ 0 };
@@ -394,6 +400,7 @@ public:
 	}
 };
 
+//название Analyze для сравнения? wtf
 bool AnalyzeData(const Data& _first, const Data& _second)
 {
 	char* firstStr{ _first.getName() };
@@ -416,6 +423,7 @@ private:
 	int cntData;
 	Data* ArrayData;
 
+//можно просто назвать    LinearPolynomial parse(const char*)
 	void getLinearPolynomialFromString(char* String)
 	{
 		int i{ 0 };
@@ -555,6 +563,7 @@ public:
 		//cout<<"Constructor №4 for LinearPolynomial\n";
 	}
 
+//поменять нахвание на понятное
 	int getCntData() const
 	{
 		return cntData;
@@ -570,6 +579,7 @@ public:
 		return ArrayData[index];
 	}
 
+//просто setData или setArrayData, не надо рассказывать о какой-то части реализации
 	void setArrayDataAndCnt(Data* newArrayData, int newCntData)
 	{
 		if (newCntData <= 0)
@@ -585,6 +595,7 @@ public:
 		}
 	}
 
+//зачем, если есть operator=?
 	void setLinearPolynomial(const LinearPolynomial& newLP)
 	{
 		if (this == &newLP)
@@ -632,6 +643,7 @@ public:
 		return *this;
 	}
 
+//операторы ++, --? какой в них смысл
 	LinearPolynomial operator ++(int)
 	{
 		LinearPolynomial tmp{ *this };
@@ -681,6 +693,7 @@ public:
 		return tmp;
 	}
 
+//неестественная операция
 	LinearPolynomial operator +(double coeff)
 	{
 		LinearPolynomial tmp{ *this };
@@ -689,6 +702,7 @@ public:
 		return tmp;
 	}
 
+//неестественная операция
 	LinearPolynomial operator -(double coeff)
 	{
 		LinearPolynomial tmp{ *this };
@@ -754,13 +768,14 @@ public:
 		return *this;
 	}
 
+//неестественная операция
 	LinearPolynomial& operator +=(double coeff)
 	{
 		for (int i{ 0 }; i < cntData; ++i)
 			ArrayData[i] += coeff;
 		return *this;
 	}
-
+//неестественная операция
 	LinearPolynomial& operator -=(double coeff)
 	{
 		for (int i{ 0 }; i < cntData; ++i)
@@ -802,7 +817,7 @@ public:
 	{
 		for (int i{ 0 }; i < lp.cntData; ++i)
 		{
-			if (i && lp.ArrayData[i].getCoefficient() > EPS)
+			if (i && lp.ArrayData[i].getCoefficient() > EPS)//зачем if(i)?
 				sstream << "+";
 			sstream << lp.ArrayData[i];
 		}
