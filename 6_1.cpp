@@ -10,18 +10,18 @@
 
 using namespace std;
 
-const int MAX_STRING_LEN{ 255 };
-const int PRECISION_FOR_OUTPUT{ 3 };
+const int maxStringLen{ 255 };
+const int outputPrecision{ 3 };
 const double EPS{ 1e-9 };
 
 const int ERROR_NO_MEMORY{ 0 };
 const int ERROR_WRONG_CNT_MEMORY{ 1 };
-const int STRING_END{ 1 };
-const char SYMBOL_OF_STRING_END{ '\0' };
-char* GoodSymbolsForString = " +-._abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-char* GoodSymbolsForName = "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-char* Letters = "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-char* Numbers = "0123456789";
+const int stringEnd{ 1 };
+const char stringEndSymbol{ '\0' };
+const char* const symbolsString = " +-._abcdefghijklcerrcerrmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const char* const symbolsName = "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const char* const allLetters = "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const char* const allDigits = "0123456789";
 
 template <class T>
 T* getMemory(int n)
@@ -32,140 +32,140 @@ T* getMemory(int n)
 		system("pause");
 		exit(ERROR_WRONG_CNT_MEMORY);
 	}
-	T *Array = new (nothrow) T[n];
-	if (!Array)
+	T *array = new (nothrow) T[n];
+	if (!array)
 	{
 		cerr << "Ошибка выделения памяти!\n";
 		system("pause");
 		exit(ERROR_NO_MEMORY);
 	}
-	return Array;
+	return array;
 }
 
 template <class T>
-void freeMemory(T*& Array)
+void freeMemory(T*& array)
 {
-	delete[] Array;
-	Array = nullptr;
+	delete[] array;
+	array = nullptr;
 }
 
-bool checkStringForData(char* String)
+bool checkStringForData(char* str)
 {
-	char* BeginOfString{ String };
-	while (strcspn(String, " ") < strlen(String))
+	char* strBegin{ str };
+	while (strcspn(str, " ") < strlen(str))
 	{
-		strcpy(String, String + strspn(String, " "));
-		String += strcspn(String, " ");
+		strcpy(str, str + strspn(str, " "));
+		str += strcspn(str, " ");
 	}
-	String = BeginOfString;
-	if ((strlen(String) > 0) && ((String[0] == '+') || (String[0] == '-')))
-		++String;
-	int posOfPoint{ strcspn(String,".") };
-	if ((posOfPoint == strlen(String)) && ((!strlen(String)) || (strspn(String, GoodSymbolsForName) < strlen(String))))
+	str = strBegin;
+	if ((strlen(str) > 0) && ((str[0] == '+') || (str[0] == '-')))
+		++str;
+	int pointPos{ strcspn(str,".") };
+	if ((pointPos == strlen(str)) && ((!strlen(str)) || (strspn(str, symbolsName) < strlen(str))))
 		return false;
 	else
 	{
-		char* AfterFirsPoint{ String + posOfPoint + 1 };
-		if ((posOfPoint < strlen(String)) && ((!posOfPoint) || (!strlen(AfterFirsPoint)) || (strspn(String, GoodSymbolsForName) < posOfPoint) || (strspn(AfterFirsPoint, GoodSymbolsForName) < strlen(AfterFirsPoint))
-			|| (strcspn(String, Letters) < posOfPoint) || (!strcspn(AfterFirsPoint, Letters))))
+		char* afterFirsPoint{ str + pointPos + 1 };
+		if ((pointPos < strlen(str)) && ((!pointPos) || (!strlen(afterFirsPoint)) || (strspn(str, symbolsName) < pointPos) || (strspn(afterFirsPoint, symbolsName) < strlen(afterFirsPoint))
+			|| (strcspn(str, allLetters) < pointPos) || (!strcspn(afterFirsPoint, allLetters))))
 			return false;
 	}
 	return true;
 }
 
-bool stringsEqual(char* String1, char* String2)
+bool stringsEqual(const char* string1, const char* string2)
 {
-	if (strlen(String1) != strlen(String2))
+	if (strlen(string1) != strlen(string2))
 		return false;
-	int len{ strlen(String1) };
+	int len{ strlen(string1) };
 	for (int i{ 0 }; i < len; ++i)
-		if (String1[i] != String2[i])
+		if (string1[i] != string2[i])
 			return false;
 	return true;
 }
 
-bool checkDataName(char* Name)
+bool checkDataName(const char* name)
 {
-	if ((strlen(Name)) && ((strspn(Name, GoodSymbolsForName) < strlen(Name)) || (!strcspn(Name, Numbers))))
+	if ((strlen(name)) && ((strspn(name, symbolsName) < strlen(name)) || (!strcspn(name, allDigits))))
 		return false;
 	return true;
 }
 
-bool checkString(char* String, int& cntData)
+bool checkString(char* str, int& cntData)
 {
-	if ((!strlen(String)) || (strspn(String, GoodSymbolsForString) < strlen(String)))
+	if ((!strlen(str)) || (strspn(str, symbolsString) < strlen(str)))
 		return false;
-	char* BeginOfString{ String };
-	while (strcspn(String, " ") < strlen(String))
+	char* strBegin{ str };
+	while (strcspn(str, " ") < strlen(str))
 	{
-		strcpy(String, String + strspn(String, " "));
-		String += strcspn(String, " ");
+		strcpy(str, str + strspn(str, " "));
+		str += strcspn(str, " ");
 	}
-	String = BeginOfString;
-	if ((strlen(String) > 0) && ((String[0] == '+') || (String[0] == '-')))
-		++String;
-	int posOfSign{ strcspn(String,"+-") };
-	char* TMPString{ getMemory<char>(MAX_STRING_LEN) };
-	while (posOfSign < strlen(String))
+	str = strBegin;
+	if ((strlen(str) > 0) && ((str[0] == '+') || (str[0] == '-')))
+		++str;
+	int signPos{ strcspn(str,"+-") };
+	char* tmp{ getMemory<char>(maxStringLen) };
+	while (signPos < strlen(str))
 	{
-		strncpy(TMPString, String, posOfSign);
-		TMPString[posOfSign] = '\0';
-		if (!checkStringForData(TMPString))
+		strncpy(tmp, str, signPos);
+		tmp[signPos] = '\0';
+		if (!checkStringForData(tmp))
 		{
-			freeMemory(TMPString);
+			freeMemory(tmp);
 			return false;
 		}
 		++cntData;
-		String += posOfSign;
-		posOfSign = strcspn(String + 1, "+-") + 1;
+		str += signPos;
+		signPos = strcspn(str + 1, "+-") + 1;
 	}
-	strncpy(TMPString, String, posOfSign);
-	TMPString[posOfSign] = '\0';
-	if (!checkStringForData(TMPString))
+	strncpy(tmp, str, signPos);
+	tmp[signPos] = '\0';
+	if (!checkStringForData(tmp))
 	{
-		freeMemory(TMPString);
+		freeMemory(tmp);
 		return false;
 	}
 	++cntData;
-	freeMemory(TMPString);
+	freeMemory(tmp);
 	return true;
 }
 
 class Data
 {
 private:
-	char* Name;
+	char* name;
 	double coefficient;
 
-	void getDataFromString(char* String)
+	void parseString(char* str)
 	{
 		bool flag{ 0 };
-		if ((String[0] == '+') || (String[0] == '-'))
+		if ((str[0] == '+') || (str[0] == '-'))
 		{
-			if (String[0] == '-')
+			if (str[0] == '-')
 				flag = 1;
-			++String;
+			++str;
 		}
-		int posOfPoint{ strcspn(String,".") };
-		if (posOfPoint == strlen(String))
+		int pointPos{ strcspn(str,".") };
+		if (pointPos == strlen(str))
 		{
-			char* BeginOfLetters{ String + strspn(String,Numbers) };
-			Name = getMemory<char>(strlen(BeginOfLetters) + STRING_END);
-			strcpy(Name, BeginOfLetters);
-			strcpy(BeginOfLetters, "\0");
-			if (!strlen(String))
+			char* lettersBegin{ str + strspn(str,allDigits) };
+			name = getMemory<char>(strlen(lettersBegin) + stringEnd);
+			strcpy(name, lettersBegin);
+			strcpy(lettersBegin, "\0");
+			if (!strlen(str))
 				coefficient = 1;
 			else
-				coefficient = atof(String);
+				coefficient = atof(str);
 		}
 		else
 		{
-			char* BeginOfLetters{ String + posOfPoint + 1 + strspn(String + posOfPoint + 1,Numbers) };
-			Name = getMemory<char>(strlen(BeginOfLetters) + STRING_END);
-			strcpy(Name, BeginOfLetters);
-			strcpy(BeginOfLetters, "\0");
-			String[posOfPoint] = ',';
-			coefficient = atof(String);
+			char* lettersBegin{ str + pointPos + 1 + strspn(str + pointPos + 1,allDigits) };
+			name = getMemory<char>(strlen(lettersBegin) + stringEnd);
+			strcpy(name, lettersBegin);
+			strcpy(lettersBegin, "\0");
+			str[pointPos] = ',';
+			coefficient = atof(str);
 		}
 		if (flag)
 			coefficient *= -1;
@@ -173,75 +173,75 @@ private:
 public:
 	~Data()
 	{
-		freeMemory(Name);
+		freeMemory(name);
 		//cout<<"Destructor for Data\n";
 	}
 
-	Data() : Name{ getMemory<char>(STRING_END) }, coefficient{ 0 }
+	Data() : name{ getMemory<char>(stringEnd) }, coefficient{ 0 }
 	{
-		Name[0] = SYMBOL_OF_STRING_END;
+		name[0] = stringEnd;
 		//cout<<"Constructor №1 for Data\n";
 	};
 
-	Data(char* newName, double newCoefficient) : Name{ getMemory<char>(strlen(newName) + STRING_END) }, coefficient{ newCoefficient }
+	Data(const char* newName, double newCoefficient) : name{ getMemory<char>(strlen(newName) + stringEnd) }, coefficient{ newCoefficient }
 	{
 		if (!checkDataName(newName))
 		{
 			cerr << "Ошибка! Некорректное название неизвестной! Установлено значение по умолчанию\n\n";
-			freeMemory(Name);
-			Name = getMemory<char>(STRING_END);
-			Name[0] = SYMBOL_OF_STRING_END;
+			freeMemory(name);
+			name = getMemory<char>(stringEnd);
+			name[0] = stringEnd;
 		}
 		else
-			strcpy(Name, newName);
+			strcpy(name, newName);
 		//cout<<"Constructor №2 for Data\n";
 	}
 
-	Data(const Data& newData) : Name{ getMemory<char>(strlen(newData.Name) + STRING_END) }, coefficient{ newData.coefficient }
+	Data(const Data& newData) : name{ getMemory<char>(strlen(newData.name) + stringEnd) }, coefficient{ newData.coefficient }
 	{
-		strcpy(Name, newData.Name);
+		strcpy(name, newData.name);
 		//cout<<"Constructor №3 for Data\n";
 	}
 
-	Data(char* String) : coefficient{ 0 }
+	Data(const char* str) : coefficient{ 0 }
 	{
-		char* TMPString{ getMemory<char>(strlen(String) + STRING_END) };
-		strcpy(TMPString, String);
-		if (!checkStringForData(TMPString))
+		char* tmp{ getMemory<char>(strlen(str) + stringEnd) };
+		strcpy(tmp, str);
+		if (!checkStringForData(tmp))
 		{
 			cerr << "Ошибка! Введен некорректный моном! Установлено значение по умолчанию\n\n";
-			Name = getMemory<char>(STRING_END);
-			Name[0] = SYMBOL_OF_STRING_END;
+			name = getMemory<char>(stringEnd);
+			name[0] = stringEnd;
 		}
 		else
-			getDataFromString(TMPString);
-		freeMemory(TMPString);
+			parseString(tmp);
+		freeMemory(tmp);
 		//cout<<"Constructor №4 for Data\n";
 	}
 
-	void setString(char* String)
+	void setString(const char* str)
 	{
-		char* TMPString{ getMemory<char>(strlen(String) + STRING_END) };
-		strcpy(TMPString, String);
-		if (!checkStringForData(TMPString))
+		char* tmp{ getMemory<char>(strlen(str) + stringEnd) };
+		strcpy(tmp, str);
+		if (!checkStringForData(tmp))
 			cerr << "Ошибка! Введен некорректный моном! Изменения не применены\n\n";
 		else
 		{
-			freeMemory(Name);
-			getDataFromString(TMPString);
+			freeMemory(name);
+			parseString(tmp);
 		}
-		freeMemory(TMPString);
+		freeMemory(tmp);
 	}
 
-	void setName(char* newName)
+	void setName(const char* newName)
 	{
 		if (!checkDataName(newName))
 			cerr << "Ошибка! Некорректное название неизвестной! Изменения не применены\n\n";
 		else
 		{
-			freeMemory(Name);
-			Name = getMemory<char>(strlen(newName) + STRING_END);
-			strcpy(Name, newName);
+			freeMemory(name);
+			name = getMemory<char>(strlen(newName) + stringEnd);
+			strcpy(name, newName);
 		}
 	}
 
@@ -250,15 +250,15 @@ public:
 		coefficient = newCoefficient;
 	}
 
-	void setNameAndCoefficient(char* newName, double newCoefficient)
+	void setNameAndCoefficient(const char* newName, double newCoefficient)
 	{
 		if (!checkDataName(newName))
 			cerr << "Ошибка! Некорректное название неизвестной! Изменения не применены\n\n";
 		else
 		{
-			freeMemory(Name);
-			Name = getMemory<char>(strlen(newName) + STRING_END);
-			strcpy(Name, newName);
+			freeMemory(name);
+			name = getMemory<char>(strlen(newName) + stringEnd);
+			strcpy(name, newName);
 			coefficient = newCoefficient;
 		}
 	}
@@ -267,9 +267,9 @@ public:
 	{
 		if (this == &newData)
 			return;
-		freeMemory(Name);
-		Name = getMemory<char>(strlen(newData.Name) + STRING_END);
-		strcpy(Name, newData.Name);
+		freeMemory(name);
+		name = getMemory<char>(strlen(newData.name) + stringEnd);
+		strcpy(name, newData.name);
 		coefficient = newData.coefficient;
 	}
 
@@ -280,7 +280,7 @@ public:
 
 	char* getName() const
 	{
-		return Name;
+		return name;
 	}
 
 	Data& operator =(const Data& newData)
@@ -288,15 +288,15 @@ public:
 		if (this == &newData)
 			return *this;
 		coefficient = newData.coefficient;
-		freeMemory(Name);
-		Name = getMemory<char>(strlen(newData.Name) + ((!strlen(newData.Name)) ? 1 : 0));
-		strcpy(Name, newData.Name);
+		freeMemory(name);
+		name = getMemory<char>(strlen(newData.name) + ((!strlen(newData.name)) ? 1 : 0));
+		strcpy(name, newData.name);
 		return *this;
 	}
 
 	Data operator *(double coeff)
 	{
-		return Data(Name, coefficient*coeff);
+		return Data{name, coefficient*coeff};
 	}
 
 	Data operator /(double coeff)
@@ -304,36 +304,36 @@ public:
 		if (fabs(coeff) < EPS)
 		{
 			cerr << "Ошибка! Деление на 0! Операция не выполена\n\n";
-			return Data(Name, coefficient);
+			return Data{name, coefficient};
 		}
-		return Data(Name, coefficient / coeff);
+		return Data{name, coefficient / coeff};
 	}
 
 	Data operator +(double coeff)
 	{
-		return Data(Name, coefficient + coeff);
+		return Data{name, coefficient + coeff};
 	}
 
 	Data operator -(double coeff)
 	{
-		return Data(Name, coefficient - coeff);
+		return Data{name, coefficient - coeff};
 	}
 
 	Data operator -()
 	{
-		return Data(Name, -coefficient);
+		return Data{name, -coefficient};
 	}
 
 	Data operator ++(int)
 	{
 		++(*this);
-		return Data(Name, coefficient - 1);
+		return Data{name, coefficient - 1};
 	}
 
 	Data operator --(int)
 	{
 		--(*this);
-		return Data(Name, coefficient + 1);
+		return Data{name, coefficient + 1};
 	}
 
 	Data& operator ++()
@@ -380,24 +380,24 @@ public:
 	friend ostream& operator <<(ostream& sstream, const Data& data)
 	{
 		sstream << fixed;
-		sstream << setprecision(PRECISION_FOR_OUTPUT) << data.coefficient << data.Name;
+		sstream << setprecision(outputPrecision) << data.coefficient << data.name;
 		return sstream;
 	}
 
 	friend istream& operator >>(istream& sstream, Data& data)
 	{
-		char* String{ getMemory<char>(MAX_STRING_LEN) };
-		sstream.getline(String, MAX_STRING_LEN);
-		data.setString(String);
-		freeMemory(String);
+		char* str{ getMemory<char>(maxStringLen) };
+		sstream.getline(str, maxStringLen);
+		data.setString(str);
+		freeMemory(str);
 		return sstream;
 	}
 };
 
-bool AnalyzeData(const Data& _first, const Data& _second)
+bool compareData(const Data& first, const Data& second)
 {
-	char* firstStr{ _first.getName() };
-	char* secondStr{ _second.getName() };
+	char* firstStr{ first.getName() };
+	char* secondStr{ second.getName() };
 	int lenFirst{ strlen(firstStr) }, lenSecond{ strlen(secondStr) };
 	if (lenFirst < lenSecond)
 		return true;
@@ -414,131 +414,131 @@ class LinearPolynomial
 {
 private:
 	int cntData;
-	Data* ArrayData;
+	Data* arrayData;
 
-	void getLinearPolynomialFromString(char* String)
+	void parseString(char* str)
 	{
 		int i{ 0 };
-		int posOfSign{ 0 };
-		if ((strlen(String) > 0) && ((String[0] == '+') || (String[0] == '-')))
-			posOfSign = strcspn(String + 1, "+-") + 1;
+		int signPos{ 0 };
+		if ((strlen(str) > 0) && ((str[0] == '+') || (str[0] == '-')))
+			signPos = strcspn(str + 1, "+-") + 1;
 		else
-			posOfSign = strcspn(String, "+-");
-		char* TMPString{ getMemory<char>(MAX_STRING_LEN) };
-		while (posOfSign < strlen(String))
+			signPos = strcspn(str, "+-");
+		char* tmp{ getMemory<char>(maxStringLen) };
+		while (signPos < strlen(str))
 		{
-			strncpy(TMPString, String, posOfSign);
-			TMPString[posOfSign] = '\0';
-			ArrayData[i++].setString(TMPString);
-			String += posOfSign;
-			posOfSign = strcspn(String + 1, "+-") + 1;
+			strncpy(tmp, str, signPos);
+			tmp[signPos] = '\0';
+			arrayData[i++].setString(tmp);
+			str += signPos;
+			signPos = strcspn(str + 1, "+-") + 1;
 		}
-		strncpy(TMPString, String, posOfSign);
-		TMPString[posOfSign] = '\0';
-		ArrayData[i++].setString(TMPString);
-		freeMemory(TMPString);
+		strncpy(tmp, str, signPos);
+		tmp[signPos] = '\0';
+		arrayData[i++].setString(tmp);
+		freeMemory(tmp);
 	}
 
-	void QuickSort(int bbegin, int eend)
+	void quickSort(int begin, int end)
 	{
-		if (bbegin == eend)
+		if (begin == end)
 			return;
-		int _left{ bbegin }, _right{ eend }, middle{ (bbegin + eend) / 2 };
+		int left{ begin }, right{ end }, middle{ (begin + end) / 2 };
 		Data tmp;
-		while (_left <= _right)
+		while (left <= right)
 		{
-			while (AnalyzeData(ArrayData[_left], ArrayData[middle]))
-				++_left;
-			while (AnalyzeData(ArrayData[middle], ArrayData[_right]))
-				--_right;
-			if (_left <= _right)
+			while (compareData(arrayData[left], arrayData[middle]))
+				++left;
+			while (compareData(arrayData[middle], arrayData[right]))
+				--right;
+			if (left <= right)
 			{
-				tmp = ArrayData[_left];
-				ArrayData[_left] = ArrayData[_right];
-				ArrayData[_right] = tmp;
-				++_left;
-				--_right;
+				tmp = arrayData[left];
+				arrayData[left] = arrayData[right];
+				arrayData[right] = tmp;
+				++left;
+				--right;
 			}
 		}
-		if (_right > bbegin)
-			QuickSort(bbegin, _right);
-		if (_left < eend)
-			QuickSort(_left, eend);
+		if (right > begin)
+			quickSort(begin, right);
+		if (left < end)
+			quickSort(left, end);
 	}
 
 	void normalize()
 	{
-		QuickSort(0, cntData - 1);
+		quickSort(0, cntData - 1);
 		int j{ 0 };
 		for (int i{ 0 }; i < (cntData - 1); ++i)
 		{
 			j = i + 1;
-			while ((j < cntData) && stringsEqual(ArrayData[i].getName(), ArrayData[j].getName()))
+			while ((j < cntData) && stringsEqual(arrayData[i].getName(), arrayData[j].getName()))
 			{
-				ArrayData[i] += ArrayData[j].getCoefficient();
+				arrayData[i] += arrayData[j].getCoefficient();
 				++j;
 			}
 			if (j != (i + 1))
 			{
-				if (fabs(ArrayData[i].getCoefficient()) < EPS)
+				if (fabs(arrayData[i].getCoefficient()) < EPS)
 					--i;
 				int tmp{ j };
 				for (int k{ i + 1 }; j < cntData; ++j, ++k)
-					ArrayData[k] = ArrayData[j];
+					arrayData[k] = arrayData[j];
 				cntData -= tmp - i - 1;
 			}
-			else if (fabs(ArrayData[i].getCoefficient()) < EPS)
+			else if (fabs(arrayData[i].getCoefficient()) < EPS)
 			{
 				for (; j < cntData; ++j)
-					ArrayData[j - 1] = ArrayData[j];
+					arrayData[j - 1] = arrayData[j];
 				--i;
 				--cntData;
 			}
 		}
-		if (fabs(ArrayData[cntData - 1].getCoefficient()) < EPS)
+		if (fabs(arrayData[cntData - 1].getCoefficient()) < EPS)
 			--cntData;
 	}
 public:
 	~LinearPolynomial()
 	{
-		freeMemory(ArrayData);
+		freeMemory(arrayData);
 		//cout<<"Destructor for LinearPolynomial\n";
 	};
 
-	LinearPolynomial() : cntData{ 0 }, ArrayData{ nullptr }
+	LinearPolynomial() : cntData{ 0 }, arrayData{ nullptr }
 	{
 		//cout<<"Constructor №1 for LinearPolynomial\n";
 	}
 
-	LinearPolynomial(const LinearPolynomial& lp) : cntData{ lp.cntData }, ArrayData{ nullptr }
+	LinearPolynomial(const LinearPolynomial& lp) : cntData{ lp.cntData }, arrayData{ nullptr }
 	{
 		if (lp.cntData)
-			ArrayData = getMemory<Data>(lp.cntData);
+			arrayData = getMemory<Data>(lp.cntData);
 		for (int i{ 0 }; i < lp.cntData; ++i)
-			ArrayData[i] = lp.ArrayData[i];
+			arrayData[i] = lp.arrayData[i];
 		//cout<<"Constructor №2 for LinearPolynomial\n";
 	}
 
-	LinearPolynomial(char* String) : cntData{ 0 }, ArrayData{ nullptr }
+	LinearPolynomial(const char* str) : cntData{ 0 }, arrayData{ nullptr }
 	{
-		char* TMPString{ getMemory<char>(strlen(String) + STRING_END) };
-		strcpy(TMPString, String);
-		if (!checkString(TMPString, cntData))
+		char* tmp{ getMemory<char>(strlen(str) + stringEnd) };
+		strcpy(tmp, str);
+		if (!checkString(tmp, cntData))
 		{
 			cerr << "Ошибка! Введен некорректный полином! Установлено значение по умолчанию\n\n";
 			cntData = 0;
 		}
 		else
 		{
-			ArrayData = getMemory<Data>(cntData);
-			getLinearPolynomialFromString(TMPString);
+			arrayData = getMemory<Data>(cntData);
+			parseString(tmp);
 			normalize();
 		}
-		freeMemory(TMPString);
+		freeMemory(tmp);
 		//cout<<"Constructor №3 for LinearPolynomial\n";
 	}
 
-	LinearPolynomial(Data* newArrayData, int newCntData) : cntData{ newCntData }, ArrayData{ nullptr }
+	LinearPolynomial(const Data* newArrayData, int newCntData) : cntData{ newCntData }, arrayData{ nullptr }
 	{
 		if (newCntData <= 0)
 		{
@@ -547,15 +547,15 @@ public:
 		}
 		else
 		{
-			ArrayData = getMemory<Data>(newCntData);
+			arrayData = getMemory<Data>(newCntData);
 			for (int i{ 0 }; i < newCntData; ++i)
-				ArrayData[i] = newArrayData[i];
+				arrayData[i] = newArrayData[i];
 			normalize();
 		}
 		//cout<<"Constructor №4 for LinearPolynomial\n";
 	}
 
-	int getCntData() const
+	int getCnt() const
 	{
 		return cntData;
 	}
@@ -567,20 +567,20 @@ public:
 			cerr << "Ошибка! Выход за границу массива! Возвращен объект по умолчанию\n\n";
 			return Data{};
 		}
-		return ArrayData[index];
+		return arrayData[index];
 	}
 
-	void setArrayDataAndCnt(Data* newArrayData, int newCntData)
+	void setArrayData(const Data* newArrayData, int newCntData)
 	{
 		if (newCntData <= 0)
 			cerr << "Ошибка! Некорректное значение размера массива! Изменения не применены\n\n";
 		else
 		{
 			cntData = newCntData;
-			freeMemory(ArrayData);
-			ArrayData = getMemory<Data>(newCntData);
+			freeMemory(arrayData);
+			arrayData = getMemory<Data>(newCntData);
 			for (int i{ 0 }; i < newCntData; ++i)
-				ArrayData[i] = newArrayData[i];
+				arrayData[i] = newArrayData[i];
 			normalize();
 		}
 	}
@@ -589,82 +589,56 @@ public:
 	{
 		if (this == &newLP)
 			return;
-		freeMemory(ArrayData);
+		freeMemory(arrayData);
 		if (newLP.cntData)
-			ArrayData = getMemory<Data>(newLP.cntData);
+			arrayData = getMemory<Data>(newLP.cntData);
 		else
-			ArrayData = nullptr;
+			arrayData = nullptr;
 		cntData = newLP.cntData;
 		for (int i{ 0 }; i < newLP.cntData; ++i)
-			ArrayData[i] = newLP.ArrayData[i];
+			arrayData[i] = newLP.arrayData[i];
 	}
 
-	void setString(char* String)
+	void setString(const char* str)
 	{
-		char* TMPString{ getMemory<char>(strlen(String) + STRING_END) };
-		strcpy(TMPString, String);
+		char* tmp{ getMemory<char>(strlen(str) + stringEnd) };
+		strcpy(tmp, str);
 		int newCntData{ 0 };
-		if (!checkString(TMPString, newCntData))
+		if (!checkString(tmp, newCntData))
 			cerr << "Ошибка! Введен некорректный полином! Изменения не применены\n\n";
 		else
 		{
-			freeMemory(ArrayData);
+			freeMemory(arrayData);
 			cntData = newCntData;
-			ArrayData = getMemory<Data>(cntData);
-			getLinearPolynomialFromString(TMPString);
+			arrayData = getMemory<Data>(cntData);
+			parseString(tmp);
 			normalize();
 		}
-		freeMemory(TMPString);
+		freeMemory(tmp);
 	}
 
 	LinearPolynomial& operator =(const LinearPolynomial& newLP)
 	{
 		if (this == &newLP)
 			return *this;
-		freeMemory(ArrayData);
+		freeMemory(arrayData);
 		if (newLP.cntData)
-			ArrayData = getMemory<Data>(newLP.cntData);
+			arrayData = getMemory<Data>(newLP.cntData);
 		else
-			ArrayData = nullptr;
+			arrayData = nullptr;
 		cntData = newLP.cntData;
 		for (int i{ 0 }; i < newLP.cntData; ++i)
-			ArrayData[i] = newLP.ArrayData[i];
-		return *this;
-	}
-
-	LinearPolynomial operator ++(int)
-	{
-		LinearPolynomial tmp{ *this };
-		++(*this);
-		return tmp;
-	}
-
-	LinearPolynomial operator --(int)
-	{
-		LinearPolynomial tmp{ *this };
-		--(*this);
-		return tmp;
-	}
-
-	LinearPolynomial& operator ++()
-	{
-		for (int i{ 0 }; i < cntData; ++i)
-			++ArrayData[i];
-		return *this;
-	}
-
-	LinearPolynomial& operator --()
-	{
-		for (int i{ 0 }; i < cntData; ++i)
-			--ArrayData[i];
+			arrayData[i] = newLP.arrayData[i];
 		return *this;
 	}
 
 	LinearPolynomial operator *(double coeff)
 	{
+	   if ( fabs(coeff) < EPS )
+         return LinearPolynomial{};
 		LinearPolynomial tmp{ *this };
 		for (int i{ 0 }; i < cntData; ++i)
-			tmp.ArrayData[i] *= coeff;
+			tmp.arrayData[i] *= coeff;
 		return tmp;
 	}
 
@@ -677,23 +651,7 @@ public:
 		}
 		LinearPolynomial tmp{ *this };
 		for (int i{ 0 }; i < cntData; ++i)
-			tmp.ArrayData[i] /= coeff;
-		return tmp;
-	}
-
-	LinearPolynomial operator +(double coeff)
-	{
-		LinearPolynomial tmp{ *this };
-		for (int i{ 0 }; i < cntData; ++i)
-			tmp.ArrayData[i] += coeff;
-		return tmp;
-	}
-
-	LinearPolynomial operator -(double coeff)
-	{
-		LinearPolynomial tmp{ *this };
-		for (int i{ 0 }; i < cntData; ++i)
-			tmp.ArrayData[i] -= coeff;
+			tmp.arrayData[i] /= coeff;
 		return tmp;
 	}
 
@@ -701,7 +659,7 @@ public:
 	{
 		LinearPolynomial tmp{ *this };
 		for (int i{ 0 }; i < cntData; ++i)
-			tmp.ArrayData[i] = -tmp.ArrayData[i];
+			tmp.arrayData[i] = -tmp.arrayData[i];
 		return tmp;
 	}
 
@@ -710,13 +668,13 @@ public:
 		if (!lp.cntData)
 			return LinearPolynomial{ *this };
 		int newCnt{ cntData + lp.cntData };
-		Data* TMPData{ getMemory<Data>(newCnt) };
+		Data* tmpData{ getMemory<Data>(newCnt) };
 		for (int i{ 0 }; i < cntData; ++i)
-			TMPData[i] = ArrayData[i];
+			tmpData[i] = arrayData[i];
 		for (int i{ 0 }; i < lp.cntData; ++i)
-			TMPData[cntData + i] = lp.ArrayData[i];
-		LinearPolynomial tmp{ TMPData,newCnt };
-		freeMemory(TMPData);
+			tmpData[cntData + i] = lp.arrayData[i];
+		LinearPolynomial tmp{ tmpData,newCnt };
+		freeMemory(tmpData);
 		return tmp;
 	}
 
@@ -725,20 +683,26 @@ public:
 		if (!lp.cntData)
 			return LinearPolynomial{ *this };
 		int newCnt{ cntData + lp.cntData };
-		Data* TMPData{ getMemory<Data>(newCnt) };
+		Data* tmpData{ getMemory<Data>(newCnt) };
 		for (int i{ 0 }; i < cntData; ++i)
-			TMPData[i] = ArrayData[i];
+			tmpData[i] = arrayData[i];
 		for (int i{ 0 }; i < lp.cntData; ++i)
-			TMPData[cntData + i] = -lp.ArrayData[i];
-		LinearPolynomial tmp{ TMPData,newCnt };
-		freeMemory(TMPData);
+			tmpData[cntData + i] = -lp.arrayData[i];
+		LinearPolynomial tmp{ tmpData,newCnt };
+		freeMemory(tmpData);
 		return tmp;
 	}
 
 	LinearPolynomial& operator *=(double coeff)
 	{
-		for (int i{ 0 }; i < cntData; ++i)
-			ArrayData[i] *= coeff;
+	   if (fabs(coeff) < EPS)
+      {
+         freeMemory(arrayData);
+         cntData=0;
+      }
+      else
+         for (int i{ 0 }; i < cntData; ++i)
+            arrayData[i] *= coeff;
 		return *this;
 	}
 
@@ -750,21 +714,7 @@ public:
 			return *this;
 		}
 		for (int i{ 0 }; i < cntData; ++i)
-			ArrayData[i] /= coeff;
-		return *this;
-	}
-
-	LinearPolynomial& operator +=(double coeff)
-	{
-		for (int i{ 0 }; i < cntData; ++i)
-			ArrayData[i] += coeff;
-		return *this;
-	}
-
-	LinearPolynomial& operator -=(double coeff)
-	{
-		for (int i{ 0 }; i < cntData; ++i)
-			ArrayData[i] -= coeff;
+			arrayData[i] /= coeff;
 		return *this;
 	}
 
@@ -773,13 +723,13 @@ public:
 		if (!lp.cntData)
 			return *this;
 		int newCnt{ cntData + lp.cntData };
-		Data* TMPData{ getMemory<Data>(newCnt) };
+		Data* tmp{ getMemory<Data>(newCnt) };
 		for (int i{ 0 }; i < cntData; ++i)
-			TMPData[i] = ArrayData[i];
+			tmp[i] = arrayData[i];
 		for (int i{ 0 }; i < lp.cntData; ++i)
-			TMPData[cntData + i] = lp.ArrayData[i];
-		setArrayDataAndCnt(TMPData, newCnt);
-		freeMemory(TMPData);
+			tmp[cntData + i] = lp.arrayData[i];
+		setArrayData(tmp, newCnt);
+		freeMemory(tmp);
 		return *this;
 	}
 
@@ -788,13 +738,13 @@ public:
 		if (!lp.cntData)
 			return *this;
 		int newCnt{ cntData + lp.cntData };
-		Data* TMPData{ getMemory<Data>(newCnt) };
+		Data* tmp{ getMemory<Data>(newCnt) };
 		for (int i{ 0 }; i < cntData; ++i)
-			TMPData[i] = ArrayData[i];
+			tmp[i] = arrayData[i];
 		for (int i{ 0 }; i < lp.cntData; ++i)
-			TMPData[cntData + i] = -lp.ArrayData[i];
-		setArrayDataAndCnt(TMPData, newCnt);
-		freeMemory(TMPData);
+			tmp[cntData + i] = -lp.arrayData[i];
+		setArrayData(tmp, newCnt);
+		freeMemory(tmp);
 		return *this;
 	}
 
@@ -802,19 +752,19 @@ public:
 	{
 		for (int i{ 0 }; i < lp.cntData; ++i)
 		{
-			if (i && lp.ArrayData[i].getCoefficient() > EPS)
+			if (i && lp.arrayData[i].getCoefficient() > EPS)
 				sstream << "+";
-			sstream << lp.ArrayData[i];
+			sstream << lp.arrayData[i];
 		}
 		return sstream;
 	}
 
 	friend istream& operator >>(istream& sstream, LinearPolynomial& lp)
 	{
-		char* String{ getMemory<char>(MAX_STRING_LEN) };
-		sstream.getline(String, MAX_STRING_LEN);
-		lp.setString(String);
-		freeMemory(String);
+		char* str{ getMemory<char>(maxStringLen) };
+		sstream.getline(str, maxStringLen);
+		lp.setString(str);
+		freeMemory(str);
 		return sstream;
 	}
 };
@@ -833,7 +783,7 @@ int main()
 	cout << lp2 << endl;
 	lp1 += lp2;
 	cout << lp1 << endl;
-	LinearPolynomial* ArrayLP{ getMemory<LinearPolynomial>(3) };
+	LinearPolynomial* arrayLP{ getMemory<LinearPolynomial>(3) };
 	LinearPolynomial* ptr1{ &lp2 };
 	cout << *ptr1 << endl;
 	LinearPolynomial* ptr2 = new (nothrow) LinearPolynomial;
@@ -846,16 +796,16 @@ int main()
 	cout << *ptr2 << endl;
 	for (int i{ 0 }; i < 3; ++i)
 	{
-		*(ArrayLP + i) = lp1 + i;
-		cout << *(ArrayLP + i) << endl;
+		*(arrayLP + i) = lp1 * i;
+		cout << *(arrayLP + i) << endl;
 	}
-	*ptr2 -= *ArrayLP;
+	*ptr2 -= arrayLP[1];
 	cout << *ptr2 << endl;
 	ptr1 = ptr2;
 	*ptr1 = -*ptr1;
 	cout << *ptr1 << endl;
 	delete ptr2;
-	freeMemory(ArrayLP);
+	freeMemory(arrayLP);
 	system("pause");
 	return 0;
 }
